@@ -4,6 +4,8 @@ const http= require('http');
 var fs = require('fs');
 //this moudle lets us construct the filepath 
 const path = require('path');
+var querystring = require('querystring');
+
 
 
 const port= 4000;
@@ -15,8 +17,9 @@ var handler= (request,response)=>{
 
     // var method = request.method;
      var endpoint = request.url;
-     endpoint
-
+     
+            var allTheData = '';
+       
     if (endpoint === "/") {
     
         // const filePath = path.join(__dirname, '..', 'public', 'index.html');
@@ -71,6 +74,28 @@ var handler= (request,response)=>{
       }
 
 
+       request.on('data', function (chunkOfData) {
+
+            allTheData += chunkOfData;
+        });
+        console.log('allTheData11111111111111111111111');
+             console.log(allTheData);
+             
+
+        request.on('end', function () {
+
+            console.log('allTheData2222222222222222222222222');
+            console.log(allTheData);
+
+            response.writeHead(2301, { "Location": request.headers['host']  });
+
+            // response.end();
+        });
+
+
+
+      
+
 };
 
 
@@ -81,7 +106,15 @@ const server=http.createServer(handler);
 server.listen(port, function () {
 
     console.log("Server is listening on port 3000.  Ready to accept requests!");
-});
+
+
+
+
+
+  });
+
+
+
 
 
 // module.exports = handler;
